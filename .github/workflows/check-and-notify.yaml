@@ -1,0 +1,20 @@
+name: Check and Notify
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '35 * * * *' # Every hour, at minute 35
+
+jobs:
+  check-and-notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+      - run: pip install -r src/requirements.txt
+      - run: python src/run.py
+        env:
+          LOCATION_IDS: ${{ vars.LOCATION_IDS }}
